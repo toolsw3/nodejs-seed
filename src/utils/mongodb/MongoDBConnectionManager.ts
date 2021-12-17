@@ -1,6 +1,8 @@
 import { inject } from "inversify";
 import { Collection, Db, MongoClient } from "mongodb";
 import { PARAMETERS } from "../../config/ioc/parameters";
+import { TYPES } from "../../config/ioc/types";
+import { provideSingleton } from "../inversify/CustomProviders";
 
 export interface IMongoDBConnectionManager {
     connect(): Promise<void>;

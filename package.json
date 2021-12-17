@@ -20,7 +20,8 @@
         "inversify-binding-decorators": "^4.0.0",
         "inversify-express-utils": "^6.4.3",
         "mongodb": "^4.2.1",
-        "reflect-metadata": "^0.1.13"
+        "reflect-metadata": "^0.1.13",
+        "uuid": "^8.3.2"
     },
     "devDependencies": {
         "@types/cors": "^2.8.12",
@@ -28,6 +29,7 @@
         "@types/express": "^4.17.13",
         "@types/mongodb": "^4.0.7",
         "@types/node": "^16.11.12",
+        "@types/uuid": "^8.3.3",
         "@typescript-eslint/eslint-plugin": "^5.6.0",
         "@typescript-eslint/parser": "^5.6.0",
         "eslint": "^8.4.1",
