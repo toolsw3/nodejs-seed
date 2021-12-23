@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Application } from "express";
+import { Application, NextFunction, Request, Response } from "express";
 import { Container } from "inversify";
 import { InversifyExpressServer, TYPE } from "inversify-express-utils";
 import express from "express";
@@ -10,6 +10,7 @@ import { loadParameters, PARAMETERS } from "./ioc/parameters";
 import { buildProviderModule } from "inversify-binding-decorators";
 import { IMongoDBConnectionManager, MongoDBConnectionManager } from "../utils/mongodb/MongoDBConnectionManager";
 import { TYPES } from "./ioc/types";
+import { Exception } from "../exception/Exception";
 
 const container: Container = new Container();
 
@@ -32,6 +33,21 @@ const bootstrap = async (): Promise<Application> => {
     });
 
     loadParameters();
+
+    server.setErrorConfig((app: Application) => {
+        app.use((error: unknown, request: Request, response: Response, next: NextFunction) => {
+            if (error instanceof Exception) {
+                return response.status(error.code).send({ error: error.message });
+            }
+
+            return response.status(500).send({
+                error:
+                    container.get<string>(PARAMETERS.env) === "dev"
+                        ? (error as Error).toString()
+                        : "Internal server error",
+            });
+        });
+    });
 
     // mongodb initialization
     const connectionManager = new MongoDBConnectionManager(

@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
 import { inject } from "inversify";
-import { BaseHttpController, controller, httpGet, response, request } from "inversify-express-utils";
+import { BaseHttpController, controller, response, request, httpDelete } from "inversify-express-utils";
 import { TYPES } from "../../config/ioc/types";
 import { IArticleRepository } from "../../repository/ArticleRepository";
+import { IRemoveArticleService } from "../../service/article/RemoveArticleService";
 import { validateParamUUID } from "../../validator/ParamValidator";
 
 @controller("/articles")
-export class GetArticleController extends BaseHttpController {
+export class DeleteArticleController extends BaseHttpController {
     @inject(TYPES.ArticleRepository) private readonly repository: IArticleRepository;
+    @inject(TYPES.RemoveArticleService) private readonly service: IRemoveArticleService;
 
-    @httpGet("/:uuid", ...validateParamUUID)
+    @httpDelete("/:uuid", TYPES.AuthenticationMiddleware, ...validateParamUUID)
     public async index(@request() request: Request, @response() response: Response): Promise<Response> {
         const article = await this.repository.findOneByUuid(request.params.uuid);
 
@@ -17,6 +19,8 @@ export class GetArticleController extends BaseHttpController {
             return response.status(404).send({ error: "Article not found" });
         }
 
-        return response.send(article);
+        await this.service.remove(article);
+
+        return response.status(204).send();
     }
 }
