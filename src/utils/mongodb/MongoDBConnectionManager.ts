@@ -22,11 +22,13 @@ export class MongoDBConnectionManager implements IMongoDBConnectionManager {
     public async connect(): Promise<void> {
         await this.client.connect();
         this.db = this.client.db(this.dbName);
-
-        console.log("[MongoDBConnectionManager]: Connected");
     }
 
     public getCollection(name: string): Collection {
         return this.db.collection(name);
+    }
+
+    public async close(): Promise<void> {
+        await this.client.close();
     }
 }

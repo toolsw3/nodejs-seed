@@ -56,6 +56,9 @@ const bootstrap = async (): Promise<Application> => {
     );
     await connectionManager.connect();
     container.bind(TYPES.MongoDBConnectionManager).toConstantValue(connectionManager);
+    if (container.get(PARAMETERS.env) !== "test") {
+        console.log("[MongoDBConnectionManager]: Connected");
+    }
 
     container.load(buildProviderModule());
 
