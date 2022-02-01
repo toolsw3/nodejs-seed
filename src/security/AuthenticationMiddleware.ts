@@ -10,7 +10,7 @@ const authorizationHeader: string = "Authorization";
 
 @provideSingleton(TYPES.AuthenticationMiddleware)
 export class AuthenticationMiddleware extends BaseMiddleware {
-    @inject(PARAMETERS.authToken) private readonly authToken: string;
+    private readonly authToken: string;
 
     handler(request: Request, response: Response, next: NextFunction): void {
         if (!request.header(authorizationHeader)) {

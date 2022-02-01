@@ -4,13 +4,10 @@ import { TYPES } from "../config/ioc/types";
 import { Article } from "../entity/Article";
 import { provideSingleton } from "../utils/inversify/CustomProviders";
 import { IMongoDBConnectionManager } from "../utils/mongodb/MongoDBConnectionManager";
-import { MongoRepository } from "../utils/mongodb/MongoRepository";
+import { IMongoRepository, MongoRepository } from "../utils/mongodb/MongoRepository";
 
-export interface IArticleRepository {
-    persist(article: Article): Promise<void>;
+export interface IArticleRepository extends IMongoRepository {
     findOneByUuid(uuid: string): Promise<Article | null>;
-    findAll(sort?: Sort | null, offset?: number, limit?: number): Promise<Article[]>;
-    remove(article: Article): Promise<void>;
 }
 
 const COLLECTION = "article";
