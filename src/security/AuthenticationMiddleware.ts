@@ -5,22 +5,28 @@ import { PARAMETERS } from "../config/ioc/parameters";
 import { TYPES } from "../config/ioc/types";
 import { AuthenticationException } from "../exception/AuthenticationException";
 import { provideSingleton } from "../utils/inversify/CustomProviders";
+import { interfaces, Principal } from "inversify-express-utils";
+import { userInfo } from "os";
+import { AuthorizationException } from "../exception/AuthorizationException";
 
-const authorizationHeader: string = "Authorization";
+export const authorizationHeader: string = "Authorization";
 
-@provideSingleton(TYPES.AuthenticationMiddleware)
-export class AuthenticationMiddleware extends BaseMiddleware {
-    private readonly authToken: string;
-
-    handler(request: Request, response: Response, next: NextFunction): void {
+export const authenticate =
+    (role: string) =>
+    async (request: Request, response: Response, next: NextFunction): Promise<void> => {
         if (!request.header(authorizationHeader)) {
             next(new AuthenticationException());
         }
 
-        if (request.header(authorizationHeader) !== this.authToken) {
-            next(new AuthenticationException("Invalid token"));
-        }
+        const principal: Principal = (
+            Reflect.getMetadata("inversify-express-utils:httpcontext", request) as interfaces.HttpContext
+        ).user;
 
-        next();
-    }
-}
+        if (!(await principal.isAuthenticated())) {
+            next(new AuthenticationException());
+        } else if (!(await principal.isInRole(role))) {
+            next(new AuthorizationException());
+        } else {
+            next();
+        }
+    };

@@ -16,7 +16,4 @@ export const TYPES = {
     // utils
     MongoDBConnectionManager: Symbol.for("MongoDBConnectionManager"),
     JwtTokenService: Symbol.for("JwtTokenService"),
-
-    // middlewares
-    AuthenticationMiddleware: Symbol.for("AuthenticationMiddleware"),
 };

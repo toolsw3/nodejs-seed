@@ -8,14 +8,15 @@ import cors from "cors";
 import "./ioc/loader";
 import { loadParameters, PARAMETERS } from "./ioc/parameters";
 import { buildProviderModule } from "inversify-binding-decorators";
-import { IMongoDBConnectionManager, MongoDBConnectionManager } from "../utils/mongodb/MongoDBConnectionManager";
+import { MongoDBConnectionManager } from "../utils/mongodb/MongoDBConnectionManager";
 import { TYPES } from "./ioc/types";
 import { Exception } from "../exception/Exception";
+import { AuthenticationProvider } from "../security/AuthenticationProvider";
 
 const container: Container = new Container();
 
 const bootstrap = async (): Promise<Application> => {
-    const server = new InversifyExpressServer(container);
+    const server = new InversifyExpressServer(container, null, null, null, AuthenticationProvider);
 
     server.setConfig((app) => {
         app.use(

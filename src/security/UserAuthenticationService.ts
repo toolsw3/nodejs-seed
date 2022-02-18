@@ -2,6 +2,7 @@ import { inject } from "inversify";
 import { PARAMETERS } from "../config/ioc/parameters";
 import { TYPES } from "../config/ioc/types";
 import { User } from "../entity/User";
+import { AuthenticationException } from "../exception/AuthenticationException";
 import { Exception } from "../exception/Exception";
 import { IUserRepository } from "../repository/UserRepository";
 import { IUserPasswordEncodeService } from "../service/user/UserPasswordEncodeService";
@@ -27,6 +28,7 @@ export interface UserToken {
 export interface IUserAuthenticationService {
     createToken(dto: CreateTokenDto): Promise<UserToken>;
     refreshToken(refreshToken: string): Promise<UserToken>;
+    authenticateToken(token: string): Promise<User>;
 }
 
 @provideSingleton(TYPES.UserAuthenticationService)
@@ -69,5 +71,16 @@ export class UserAuthenticationService implements IUserAuthenticationService {
             refreshToken: this.jwttokenService.generateToken(payload),
             expiresAt,
         };
+    }
+
+    public async authenticateToken(token: string): Promise<User> {
+        const payload = this.jwttokenService.decodeToken<TokenPayload>(token);
+        const user = await this.userRepository.findOneByUuid(payload.uuid);
+
+        if (user === null) {
+            throw new AuthenticationException("Invalid token");
+        }
+
+        return user;
     }
 }
