@@ -4,7 +4,7 @@ import { container } from "../../../application/config/bootstrap";
 import { TYPES } from "../../../application/config/ioc/types";
 import { MongoDBConnectionManager } from "../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { application } from "../../app";
-import { dropCollection, loadTestArticles, article0, article1 } from "../../Helpers";
+import { dropCollection, loadTestArticles, article0, article1, closeConnection } from "../../Helpers";
 
 describe("Get Articles", () => {
     let app: Application;
@@ -19,7 +19,7 @@ describe("Get Articles", () => {
 
     afterAll(async () => {
         await dropCollection("article");
-        await container.get<MongoDBConnectionManager>(TYPES.MongoDBConnectionManager).close();
+        await closeConnection();
     });
 
     it("Success", async () => {

@@ -3,12 +3,16 @@ import { ArticleRepository } from "../../../../infrastructure/repository/Article
 import { CreateArticleService } from "../../../../domain/service/article/CreateArticleService";
 import { IMongoDBConnectionManager } from "../../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { createArticleDto } from "../../../Helpers";
+import { IUuidGenerator } from "../../../../domain/service/uuid/UuidGenerator";
 
-jest.mock("../../../../repository/ArticleRepository");
+jest.mock("../../../../infrastructure/repository/ArticleRepository");
+const uuid = "7fdbfe0d-737d-49c1-a205-59fc5fab0171";
 
 describe("Create Article Service", () => {
     const repository: ArticleRepository = new ArticleRepository({} as IMongoDBConnectionManager);
-    const service = new CreateArticleService(repository);
+    const uuidGenerator: IUuidGenerator = { generate: () => uuid };
+
+    const service = new CreateArticleService(repository, uuidGenerator);
 
     it("Success", async () => {
         const now = (Date.now() / 1000) | 0;

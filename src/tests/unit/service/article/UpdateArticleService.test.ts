@@ -4,7 +4,7 @@ import { UpdateArticleService } from "../../../../domain/service/article/UpdateA
 import { IMongoDBConnectionManager } from "../../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { article0, updateArticleDto } from "../../../Helpers";
 
-jest.mock("../../../../repository/ArticleRepository");
+jest.mock("../../../../infrastructure/repository/ArticleRepository");
 
 describe("Update Article Service", () => {
     const repository: ArticleRepository = new ArticleRepository({} as IMongoDBConnectionManager);

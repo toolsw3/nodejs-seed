@@ -6,11 +6,11 @@ import {
 } from "../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { article0 } from "../../Helpers";
 
-jest.mock("../../../utils/mongodb/MongoDBConnectionManager", () => ({
+jest.mock("../../../infrastructure/mongodb/MongoDBConnectionManager", () => ({
     MongoDBConnectionManager: jest.fn().mockImplementation(() => ({
-        getCollection: () => {
-            findOne: () => article0;
-        },
+        getCollection: () => ({
+            findOne: () => article0,
+        }),
     })),
 }));
 

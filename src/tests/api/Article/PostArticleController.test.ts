@@ -4,7 +4,7 @@ import { container } from "../../../application/config/bootstrap";
 import { TYPES } from "../../../application/config/ioc/types";
 import { MongoDBConnectionManager } from "../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { application } from "../../app";
-import { dropCollection } from "../../Helpers";
+import { closeConnection, dropCollection, insertTestUser } from "../../Helpers";
 
 describe("Post Article", () => {
     let app: Application;
@@ -13,6 +13,7 @@ describe("Post Article", () => {
     beforeAll(async () => {
         app = await application();
         request = supertest(app);
+        await insertTestUser();
     });
 
     afterEach(async () => {
@@ -20,17 +21,22 @@ describe("Post Article", () => {
     });
 
     afterAll(async () => {
-        await container.get<MongoDBConnectionManager>(TYPES.MongoDBConnectionManager).close();
+        await closeConnection();
     });
 
     it("Success", async () => {
+        const loginResponse = await request.post("/authentication/token").send({
+            username: "test",
+            password: "test",
+        });
+
         const body = {
             title: "Test Article",
             content: "Test content",
             tags: ["tag1", "tag2"],
             status: "published",
         };
-        const response = await request.post("/articles").set({ Authorization: "4utht0k3n" }).send(body);
+        const response = await request.post("/articles").set({ Authorization: loginResponse.body.token }).send(body);
 
         expect(response.status).toBe(201);
         expect(response.body.title).toEqual(body.title);
@@ -40,12 +46,17 @@ describe("Post Article", () => {
     });
 
     it("Error: missing title", async () => {
+        const loginResponse = await request.post("/authentication/token").send({
+            username: "test",
+            password: "test",
+        });
+
         const body = {
             content: "Test content",
             tags: ["tag1", "tag2"],
             status: "published",
         };
-        const response = await request.post("/articles").set({ Authorization: "4utht0k3n" }).send(body);
+        const response = await request.post("/articles").set({ Authorization: loginResponse.body.token }).send(body);
 
         expect(response.status).toBe(400);
     });

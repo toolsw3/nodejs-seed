@@ -14,6 +14,21 @@ export const dropCollection = async (collection: string): Promise<void> => {
     }
 };
 
+export const closeConnection = async (): Promise<void> => {
+    await container.get<MongoDBConnectionManager>(TYPES.MongoDBConnectionManager).close();
+};
+
+export const insertTestUser = async (): Promise<void> => {
+    await container.get<MongoDBConnectionManager>(TYPES.MongoDBConnectionManager).getCollection("user").insertOne({
+        uuid: "7f7398b6-9982-417c-a06a-2e0bc80085ca",
+        username: "test",
+        password: "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+        role: "user",
+        createdAt: 1643379954,
+        updatedAt: 1643379954,
+    });
+};
+
 export const article0 = {
     title: "Test Article 1",
     content: "Test content",

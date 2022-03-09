@@ -4,6 +4,7 @@ import { container } from "../../application/config/bootstrap";
 import { TYPES } from "../../application/config/ioc/types";
 import { MongoDBConnectionManager } from "../../infrastructure/mongodb/MongoDBConnectionManager";
 import { application } from "../app";
+import { closeConnection } from "../Helpers";
 
 describe("Get Home", () => {
     let app: Application;
@@ -15,7 +16,7 @@ describe("Get Home", () => {
     });
 
     afterAll(async () => {
-        container.get<MongoDBConnectionManager>(TYPES.MongoDBConnectionManager).close();
+        await closeConnection();
     });
 
     it("Success", async () => {
