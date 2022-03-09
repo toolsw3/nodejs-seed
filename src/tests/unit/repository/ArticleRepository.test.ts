@@ -1,6 +1,9 @@
 import "reflect-metadata";
-import { ArticleRepository } from "../../../repository/ArticleRepository";
-import { IMongoDBConnectionManager, MongoDBConnectionManager } from "../../../utils/mongodb/MongoDBConnectionManager";
+import { ArticleRepository } from "../../../infrastructure/repository/ArticleRepository";
+import {
+    IMongoDBConnectionManager,
+    MongoDBConnectionManager,
+} from "../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { article0 } from "../../Helpers";
 
 jest.mock("../../../utils/mongodb/MongoDBConnectionManager", () => ({

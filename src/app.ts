@@ -1,4 +1,4 @@
-import { bootstrap } from "./config/bootstrap";
+import { bootstrap } from "./application/config/bootstrap";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";

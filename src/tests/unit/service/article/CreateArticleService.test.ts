@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import { ArticleRepository } from "../../../../repository/ArticleRepository";
-import { CreateArticleService } from "../../../../service/article/CreateArticleService";
-import { IMongoDBConnectionManager } from "../../../../utils/mongodb/MongoDBConnectionManager";
+import { ArticleRepository } from "../../../../infrastructure/repository/ArticleRepository";
+import { CreateArticleService } from "../../../../domain/service/article/CreateArticleService";
+import { IMongoDBConnectionManager } from "../../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { createArticleDto } from "../../../Helpers";
 
 jest.mock("../../../../repository/ArticleRepository");

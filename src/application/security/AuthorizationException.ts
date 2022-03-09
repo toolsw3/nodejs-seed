@@ -1,0 +1,7 @@
+import { Exception } from "../../domain/exception/Exception";
+
+export class AuthorizationException extends Exception {
+    constructor(message: string = "User is not authorized") {
+        super(message, 403);
+    }
+}

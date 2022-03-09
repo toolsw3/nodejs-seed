@@ -1,8 +1,8 @@
 import { Application } from "express";
 import supertest from "supertest";
-import { container } from "../../../config/bootstrap";
-import { TYPES } from "../../../config/ioc/types";
-import { MongoDBConnectionManager } from "../../../utils/mongodb/MongoDBConnectionManager";
+import { container } from "../../../application/config/bootstrap";
+import { TYPES } from "../../../application/config/ioc/types";
+import { MongoDBConnectionManager } from "../../../infrastructure/mongodb/MongoDBConnectionManager";
 import { application } from "../../app";
 import { dropCollection } from "../../Helpers";
 

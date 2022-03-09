@@ -1,10 +1,10 @@
 import { ObjectId } from "mongodb";
-import { container } from "../config/bootstrap";
-import { TYPES } from "../config/ioc/types";
-import { ArticleStatus } from "../entity/Article";
-import { CreateArticleDto } from "../service/article/CreateArticleService";
-import { UpdateArticleDto } from "../service/article/UpdateArticleService";
-import { MongoDBConnectionManager } from "../utils/mongodb/MongoDBConnectionManager";
+import { container } from "../application/config/bootstrap";
+import { TYPES } from "../application/config/ioc/types";
+import { ArticleStatus } from "../domain/entity/Article";
+import { CreateArticleDto } from "../domain/service/article/CreateArticleService";
+import { UpdateArticleDto } from "../domain/service/article/UpdateArticleService";
+import { MongoDBConnectionManager } from "../infrastructure/mongodb/MongoDBConnectionManager";
 
 export const dropCollection = async (collection: string): Promise<void> => {
     try {
